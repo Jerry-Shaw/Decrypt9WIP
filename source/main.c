@@ -64,8 +64,8 @@ u32 InitializeD9(MenuInfo *menu)
         Debug("Initializing SD card... success");
         FileGetData("d9logo.bin", BOT_SCREEN, 320 * 240 * 3, 0);
         Debug("Build: %s", BUILD_NAME);
-        Debug("Work directory: %s", GetWorkDir());
-        Debug("Game directory: %s", GetGameDir());
+        Debug("Work Directory: %s", GetWorkDir());
+        Debug("Game Directory: %s", GetGameDir());
         SetupSector0x96Key0x11(); // Sector0x96 key - no effect on error level
         if (SetupTwlKey0x03() != 0) // TWL KeyX / KeyY
             errorlevel = 2;
@@ -109,9 +109,9 @@ int main(int argc, char** argv)
             {
                 { "NCCH Padgen",               NcchPadgenDesc,             &NcchPadgen,            0 },
                 { "SD Padgen (SDinfo.bin)",    SdPadgenDesc,               &SdPadgen,              0 },
-                { "SD Padgen (SysNAND dir)",   SdPadgenDirectDesc,         &SdPadgenDirect,        0 },
-                { "SD Padgen (EmuNAND dir)",   SdPadgenDirectDesc,         &SdPadgenDirect,        N_EMUNAND },
-                { "Any Padgen (anypad.bin)",   AnyPadgenDesc,              &AnyPadgen,             0 },
+                { "SD Padgen (SysNAND Dir)",   SdPadgenDirectDesc,         &SdPadgenDirect,        0 },
+                { "SD Padgen (EmuNAND Dir)",   SdPadgenDirectDesc,         &SdPadgenDirect,        N_EMUNAND },
+                { "Any Padgen (Anypad.bin)",   AnyPadgenDesc,              &AnyPadgen,             0 },
                 { "CTRNAND Padgen",            CtrNandPadgenDesc,          &CtrNandPadgen,         0 },
                 { "CTRNAND Padgen (slot0x4)",  CtrNandPadgen0x04Desc,      &CtrNandPadgen,         PG_FORCESLOT4 },
                 { "TWLNAND Padgen",            TwlNandPadgenDesc,          &TwlNandPadgen,         0 },
@@ -121,8 +121,8 @@ int main(int argc, char** argv)
         {
             "Ticket/Titlekey Options", 8,
             {
-                { "Titlekey Decrypt (file)",    CryptTitlekeysFileDesc,     &CryptTitlekeysFile,    0 },
-                { "Titlekey Encrypt (file)",    CryptTitlekeysFileDesc,     &CryptTitlekeysFile,    TK_ENCRYPTED },
+                { "Titlekey Decrypt (File)",    CryptTitlekeysFileDesc,     &CryptTitlekeysFile,    0 },
+                { "Titlekey Encrypt (File)",    CryptTitlekeysFileDesc,     &CryptTitlekeysFile,    TK_ENCRYPTED },
                 { "Titlekey Decrypt (SysNAND)", DumpDecryptedTitlekeysDesc, &DumpTicketsTitlekeys,  0 },
                 { "Titlekey Decrypt (EmuNAND)", DumpDecryptedTitlekeysDesc, &DumpTicketsTitlekeys,  N_EMUNAND },
                 { "Titlekey Dump (SysNAND)",    DumpTitlekeysDesc,          &DumpTicketsTitlekeys,  TK_ENCRYPTED },
@@ -135,7 +135,7 @@ int main(int argc, char** argv)
             "SysNAND Options", 9,
             {
                 { "SysNAND Backup/Restore...",    NULL, NULL,             SUBMENU_START +  0 },
-                { "CTRNAND transfer...",          NULL, NULL,             SUBMENU_START +  2 },
+                { "CTRNAND Transfer...",          NULL, NULL,             SUBMENU_START +  2 },
                 { "Partition Dump...",            NULL, NULL,             SUBMENU_START +  4 },
                 { "Partition Inject...",          NULL, NULL,             SUBMENU_START +  6 },
                 { "System File Dump...",          NULL, NULL,             SUBMENU_START +  8 },
@@ -149,7 +149,7 @@ int main(int argc, char** argv)
             "EmuNAND Options", 9,
             {
                 { "EmuNAND Backup/Restore...",    NULL, NULL,             SUBMENU_START +  1 },
-                { "CTRNAND transfer...",          NULL, NULL,             SUBMENU_START +  3 },
+                { "CTRNAND Transfer...",          NULL, NULL,             SUBMENU_START +  3 },
                 { "Partition Dump...",            NULL, NULL,             SUBMENU_START +  5 },
                 { "Partition Inject...",          NULL, NULL,             SUBMENU_START +  7 },
                 { "System File Dump...",          NULL, NULL,             SUBMENU_START +  9 },
@@ -172,13 +172,13 @@ int main(int argc, char** argv)
         {
             "Gamecart Dumper Options", 7,
             {
-                { "Dump Cart (full)",             DumpGameCartFullDesc,    &DumpGameCart,          0 },
-                { "Dump Cart (trim)",             DumpGameCartTrimDesc,    &DumpGameCart,          CD_TRIM },
-                { "Dump & Decrypt Cart (full)",   DumpGameCartDecFullDesc, &DumpGameCart,          CD_DECRYPT },
-                { "Dump & Decrypt Cart (trim)",   DumpGameCartDecTrimDesc, &DumpGameCart,          CD_DECRYPT | CD_TRIM },
+                { "Dump Cart (Full)",             DumpGameCartFullDesc,    &DumpGameCart,          0 },
+                { "Dump Cart (Trim)",             DumpGameCartTrimDesc,    &DumpGameCart,          CD_TRIM },
+                { "Dump & Decrypt Cart (Full)",   DumpGameCartDecFullDesc, &DumpGameCart,          CD_DECRYPT },
+                { "Dump & Decrypt Cart (Trim)",   DumpGameCartDecTrimDesc, &DumpGameCart,          CD_DECRYPT | CD_TRIM },
                 { "Dump Cart to CIA",             DumpGameCartCIADesc,     &DumpGameCart,          CD_DECRYPT | CD_MAKECIA },
                 { "Dump Private Header",          DumpPrivateHeaderDesc,   &DumpPrivateHeader,     0 },
-                // { "Dump Savegame from Cart",      DumpCartSaveDesc,        &ProcessCartSave,       0 },
+                { "Dump Savegame from Cart",      DumpCartSaveDesc,        &ProcessCartSave,       0 },
                 { "Flash Savegame to Cart",       DumpCartSaveDesc,        &ProcessCartSave,       CD_FLASH }
             }
         },
@@ -204,10 +204,10 @@ int main(int argc, char** argv)
             "SysNAND Backup/Restore Options", 6, // ID 0
             {
                 { "NAND Backup",                  DumpNandFullDesc,        &DumpNand,              0 },
-                { "NAND Backup (min size)",       DumpNandMinDesc,         &DumpNand,              NB_MINSIZE },
+                { "NAND Backup (Min Size)",       DumpNandMinDesc,         &DumpNand,              NB_MINSIZE },
                 { "NAND Restore",                 RestoreNandDesc,         &RestoreNand,           N_NANDWRITE | N_A9LHWRITE },
-                { "NAND Restore (forced)",        RestoreNandForcedDesc,   &RestoreNand,           N_NANDWRITE | N_A9LHWRITE | NR_NOCHECKS },
-                { "NAND Restore (keep hax)",      RestoreNandKeepHaxDesc,  &RestoreNand,           N_NANDWRITE | NR_KEEPA9LH },
+                { "NAND Restore (Forced)",        RestoreNandForcedDesc,   &RestoreNand,           N_NANDWRITE | N_A9LHWRITE | NR_NOCHECKS },
+                { "NAND Restore (Keep Hax)",      RestoreNandKeepHaxDesc,  &RestoreNand,           N_NANDWRITE | NR_KEEPA9LH },
                 { "Validate NAND Dump",           ValidateNandDumpDesc,    &ValidateNandDump,      0 }
             }
         },
@@ -215,9 +215,9 @@ int main(int argc, char** argv)
             "EmuNAND Backup/Restore Options", 5, // ID 1
             {
                 { "NAND Backup",                  DumpNandFullDesc,        &DumpNand,              N_EMUNAND },
-                { "NAND Backup (min size)",       DumpNandMinDesc,         &DumpNand,              N_EMUNAND | NB_MINSIZE },
+                { "NAND Backup (Min Size)",       DumpNandMinDesc,         &DumpNand,              N_EMUNAND | NB_MINSIZE },
                 { "NAND Restore",                 RestoreNandDesc,         &RestoreNand,           N_NANDWRITE | N_EMUNAND | N_FORCEEMU },
-                { "NAND Restore (forced)",        RestoreNandForcedDesc,   &RestoreNand,           N_NANDWRITE | N_EMUNAND | N_FORCEEMU | NR_NOCHECKS },
+                { "NAND Restore (Forced)",        RestoreNandForcedDesc,   &RestoreNand,           N_NANDWRITE | N_EMUNAND | N_FORCEEMU | NR_NOCHECKS },
                 { "Validate NAND Dump",           ValidateNandDumpDesc,    &ValidateNandDump,      0 } // same as the one in SysNAND backup & restore
             }
         },
@@ -226,7 +226,7 @@ int main(int argc, char** argv)
             {
                 { "Auto CTRNAND Transfer",        NandTransferDesc,        &NandTransfer,          N_NANDWRITE },
                 { "Forced CTRNAND Transfer",      NandForcedTransferDesc,  &NandTransfer,          N_NANDWRITE | TF_FORCED },
-                { "Dump transferable CTRNAND",    NandDumpTransferDesc,    &DumpTransferable,      0 },
+                { "Dump Transferable CTRNAND",    NandDumpTransferDesc,    &DumpTransferable,      0 },
                 { "Autofix CTRNAND",              NandAutoFixCtrnandDesc,  &AutoFixCtrnand,        N_NANDWRITE }
             }
         },
@@ -235,7 +235,7 @@ int main(int argc, char** argv)
             {
                 { "Auto CTRNAND Transfer",        NandTransferDesc,        &NandTransfer,          N_NANDWRITE | N_EMUNAND },
                 { "Forced CTRNAND Transfer",      NandForcedTransferDesc,  &NandTransfer,          N_NANDWRITE | N_EMUNAND | TF_FORCED },
-                { "Dump transferable CTRNAND",    NandDumpTransferDesc,    &DumpTransferable,      N_EMUNAND },
+                { "Dump Transferable CTRNAND",    NandDumpTransferDesc,    &DumpTransferable,      N_EMUNAND },
                 { "Autofix CTRNAND",              NandAutoFixCtrnandDesc,  &AutoFixCtrnand,        N_NANDWRITE | N_EMUNAND }
             }
         },
@@ -382,8 +382,8 @@ int main(int argc, char** argv)
         {
             "Miscellaneous... (SysNAND)", 8, // ID 16
             {
-                { "Health&Safety Dump",           HealthAndSafetyDesc, &DumpHealthAndSafety,   0 },
-                { "Health&Safety Inject",         HealthAndSafetyDesc, &InjectHealthAndSafety, N_NANDWRITE },
+                { "Health & Safety Dump",         HealthAndSafetyDesc, &DumpHealthAndSafety,   0 },
+                { "Health & Safety Inject",       HealthAndSafetyDesc, &InjectHealthAndSafety, N_NANDWRITE },
                 { "GBA VC Save Dump",             GbaVcSaveDesc,       &DumpGbaVcSave,         0 },
                 { "GBA VC Save Inject",           GbaVcSaveDesc,       &InjectGbaVcSave,       N_NANDWRITE },
                 { "Update SeedDB",                SeedDbDesc,          &UpdateSeedDb,          0 },
@@ -395,8 +395,8 @@ int main(int argc, char** argv)
         {
             "Miscellaneous... (EmuNAND)", 6, // ID 17
             {            
-                { "Health&Safety Dump",           HealthAndSafetyDesc, &DumpHealthAndSafety,   N_EMUNAND },
-                { "Health&Safety Inject",         HealthAndSafetyDesc, &InjectHealthAndSafety, N_NANDWRITE | N_EMUNAND },
+                { "Health & Safety Dump",         HealthAndSafetyDesc, &DumpHealthAndSafety,   N_EMUNAND },
+                { "Health & Safety Inject",       HealthAndSafetyDesc, &InjectHealthAndSafety, N_NANDWRITE | N_EMUNAND },
                 { "Update SeedDB",                SeedDbDesc,          &UpdateSeedDb,          N_EMUNAND },
                 { "Dump Config (for Citra)",      CitraConfigDesc,     &DumpCitraConfig,       N_EMUNAND },
                 { "NCCH FIRMs Dump",              NcchFirmsDesc,       &DumpNcchFirms,         N_EMUNAND },
@@ -413,9 +413,9 @@ int main(int argc, char** argv)
         {
             "CIA File Options", 4, // ID 19
             {
-                { "CIA Decryptor (shallow)",      CiaDecryptShallowDesc, &CryptGameFiles,        GC_CIA_PROCESS },
-                { "CIA Decryptor (deep)",         CiaDecryptDeepDesc,    &CryptGameFiles,        GC_CIA_PROCESS | GC_CIA_DEEP },
-                { "CIA Decryptor (CXI only)",     CiaDecryptCXIDesc,     &CryptGameFiles,        GC_CIA_PROCESS | GC_CIA_DEEP | GC_CXI_ONLY },
+                { "CIA Decryptor (Shallow)",      CiaDecryptShallowDesc, &CryptGameFiles,        GC_CIA_PROCESS },
+                { "CIA Decryptor (Deep)",         CiaDecryptDeepDesc,    &CryptGameFiles,        GC_CIA_PROCESS | GC_CIA_DEEP },
+                { "CIA Decryptor (CXI Only)",     CiaDecryptCXIDesc,     &CryptGameFiles,        GC_CIA_PROCESS | GC_CIA_DEEP | GC_CXI_ONLY },
                 { "CIA Encryptor (NCCH)",         CiaEncryptDesc,        &CryptGameFiles,        GC_CIA_PROCESS | GC_NCCH_ENC0x2C }
             }
         },
@@ -430,20 +430,20 @@ int main(int argc, char** argv)
             "SD File Options", 5, // ID 21
             {
                 { "SD Decryptor/Encryptor",       CryptSdFilesDesc,    &CryptSdFiles,          0 },
-                { "SD Decryptor (SysNAND dir)",   SdDecryptorDesc,     &DecryptSdFilesDirect,  0 },
-                { "SD Decryptor (EmuNAND dir)",   SdDecryptorDesc,     &DecryptSdFilesDirect,  N_EMUNAND },
-                { "SD CXI Dumper (SysNAND dir)",  SdCXIDumpDesc,       &DecryptSdToCxi,        0 },
-                { "SD CXI Dumper (EmuNAND dir)",  SdCXIDumpDesc,       &DecryptSdToCxi,        N_EMUNAND }
+                { "SD Decryptor (SysNAND Dir)",   SdDecryptorDesc,     &DecryptSdFilesDirect,  0 },
+                { "SD Decryptor (EmuNAND Dir)",   SdDecryptorDesc,     &DecryptSdFilesDirect,  N_EMUNAND },
+                { "SD CXI Dumper (SysNAND Dir)",  SdCXIDumpDesc,       &DecryptSdToCxi,        0 },
+                { "SD CXI Dumper (EmuNAND Dir)",  SdCXIDumpDesc,       &DecryptSdToCxi,        N_EMUNAND }
             }
         },
         {
             "CIA Builder Options", 5, // ID 22
             {
                 { "Build CIA from NCCH/NCSD",     NcsdNcchToCiaDesc,   &ConvertNcsdNcchToCia,  0 },
-                { "CIA Builder (SysNAND/orig.)",  CiaBuilderDesc,      &ConvertSdToCia,        0 },
-                { "CIA Builder (EmuNAND/orig.)",  CiaBuilderDesc,      &ConvertSdToCia,        N_EMUNAND },
-                { "CIA Builder (SysNAND/decr.)",  CiaBuilderDesc,      &ConvertSdToCia,        GC_CIA_DEEP },
-                { "CIA Builder (EmuNAND/decr.)",  CiaBuilderDesc,      &ConvertSdToCia,        GC_CIA_DEEP | N_EMUNAND }
+                { "CIA Builder (SysNAND/Orig.)",  CiaBuilderDesc,      &ConvertSdToCia,        0 },
+                { "CIA Builder (EmuNAND/Orig.)",  CiaBuilderDesc,      &ConvertSdToCia,        N_EMUNAND },
+                { "CIA Builder (SysNAND/Decr.)",  CiaBuilderDesc,      &ConvertSdToCia,        GC_CIA_DEEP },
+                { "CIA Builder (EmuNAND/Decr.)",  CiaBuilderDesc,      &ConvertSdToCia,        GC_CIA_DEEP | N_EMUNAND }
             }
         },
         {
