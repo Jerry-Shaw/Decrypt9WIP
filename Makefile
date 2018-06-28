@@ -30,7 +30,7 @@ THEME	:=
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
-ARCH	:=	-mthumb -mthumb-interwork -flto
+ARCH	:=	-mthumb -mthumb-interwork
 
 CFLAGS	:=	-g -Wall -Wextra -Wpedantic -Wno-main -O2\
 			-march=armv5te -mtune=arm946e-s -fomit-frame-pointer\
@@ -114,7 +114,8 @@ export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 
 export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 
-.PHONY: common clean all gateway firm binary cakehax cakerop brahma release
+# .PHONY: common clean all gateway firm binary cakehax cakerop brahma release
+.PHONY: common clean all firm binary release
 
 #---------------------------------------------------------------------------------
 all: firm
@@ -132,44 +133,44 @@ binary: common
 firm: binary
 	@firmtool build $(OUTPUT).firm -n 0x23F00000 -e 0 -D $(OUTPUT).elf -A 0x23F00000 -C NDMA -i
 
-gateway: binary
-	@cp resources/LauncherTemplate.dat $(OUTPUT_D)/Launcher.dat
-	@dd if=$(OUTPUT).bin of=$(OUTPUT_D)/Launcher.dat bs=1497296 seek=1 conv=notrunc
+# gateway: binary
+# 	@cp resources/LauncherTemplate.dat $(OUTPUT_D)/Launcher.dat
+# 	@dd if=$(OUTPUT).bin of=$(OUTPUT_D)/Launcher.dat bs=1497296 seek=1 conv=notrunc
 
-cakehax: submodules binary
-	@make dir_out=$(OUTPUT_D) name=$(TARGET).dat -C CakeHax bigpayload
-	@dd if=$(OUTPUT).bin of=$(OUTPUT).dat bs=512 seek=160
+# cakehax: submodules binary
+# 	@make dir_out=$(OUTPUT_D) name=$(TARGET).dat -C CakeHax bigpayload
+# 	@dd if=$(OUTPUT).bin of=$(OUTPUT).dat bs=512 seek=160
 
-cakerop: cakehax
-	@make DATNAME=$(TARGET).dat DISPNAME=$(TARGET) GRAPHICS=../resources/CakesROP -C CakesROP
-	@mv CakesROP/CakesROP.nds $(OUTPUT_D)/$(TARGET).nds
+# cakerop: cakehax
+# 	@make DATNAME=$(TARGET).dat DISPNAME=$(TARGET) GRAPHICS=../resources/CakesROP -C CakesROP
+# 	@mv CakesROP/CakesROP.nds $(OUTPUT_D)/$(TARGET).nds
 
-brahma: submodules binary
-	@[ -d BrahmaLoader/data ] || mkdir -p BrahmaLoader/data
-	@cp $(OUTPUT).bin BrahmaLoader/data/payload.bin
-	@cp resources/BrahmaAppInfo BrahmaLoader/resources/AppInfo
-	@cp resources/BrahmaIcon.png BrahmaLoader/resources/icon.png
-	@make --no-print-directory -C BrahmaLoader APP_TITLE=$(TARGET)
-	@mv BrahmaLoader/output/*.3dsx $(OUTPUT_D)
-	@mv BrahmaLoader/output/*.smdh $(OUTPUT_D)
+# brahma: submodules binary
+# 	@[ -d BrahmaLoader/data ] || mkdir -p BrahmaLoader/data
+# 	@cp $(OUTPUT).bin BrahmaLoader/data/payload.bin
+# 	@cp resources/BrahmaAppInfo BrahmaLoader/resources/AppInfo
+# 	@cp resources/BrahmaIcon.png BrahmaLoader/resources/icon.png
+# 	@make --no-print-directory -C BrahmaLoader APP_TITLE=$(TARGET)
+# 	@mv BrahmaLoader/output/*.3dsx $(OUTPUT_D)
+# 	@mv BrahmaLoader/output/*.smdh $(OUTPUT_D)
 
 release:
 	@rm -fr $(BUILD) $(OUTPUT_D) $(RELEASE)
 	@make --no-print-directory binary
 	@-make --no-print-directory firm
-	@-make --no-print-directory gateway
-	@-make --no-print-directory cakerop
-	@-make --no-print-directory brahma
+	# @-make --no-print-directory gateway
+	# @-make --no-print-directory cakerop
+	# @-make --no-print-directory brahma
 	@[ -d $(RELEASE) ] || mkdir -p $(RELEASE)
 	@[ -d $(RELEASE)/$(TARGET) ] || mkdir -p $(RELEASE)/$(TARGET)
 	@[ -d $(RELEASE)/scripts ] || mkdir -p $(RELEASE)/scripts
-	@-cp $(OUTPUT_D)/Launcher.dat $(RELEASE)
+	# @-cp $(OUTPUT_D)/Launcher.dat $(RELEASE)
 	@cp $(OUTPUT).bin $(RELEASE)
 	@-cp $(OUTPUT).firm $(RELEASE)
-	@-cp $(OUTPUT).dat $(RELEASE)
-	@-cp $(OUTPUT).nds $(RELEASE)
-	@-cp $(OUTPUT).3dsx $(RELEASE)/$(TARGET)
-	@-cp $(OUTPUT).smdh $(RELEASE)/$(TARGET)
+	# @-cp $(OUTPUT).dat $(RELEASE)
+	# @-cp $(OUTPUT).nds $(RELEASE)
+	# @-cp $(OUTPUT).3dsx $(RELEASE)/$(TARGET)
+	# @-cp $(OUTPUT).smdh $(RELEASE)/$(TARGET)
 	@-cp $(CURDIR)/resources/d9logo.bin $(RELEASE)/d9logo.bin
 	@cp $(CURDIR)/scripts/*.py $(RELEASE)/scripts
 	@cp $(CURDIR)/README.md $(RELEASE)
