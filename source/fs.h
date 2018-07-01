@@ -2,13 +2,15 @@
 
 #include "common.h"
 
-#define WORK_DIRS   "/files9", "/Decrypt9"
-#define GAME_DIRS   "/files9/D9Game", "/Decrypt9/D9Game", "/D9Game", WORK_DIRS
+#define SUPPORT_DIRS   "/Support"
+#define WORK_DIRS   "/Output/Decrypt9", "/Output"
+#define GAME_DIRS   "/Output/Decrypt9/Games", WORK_DIRS
 
 bool InitFS();
 void DeinitFS();
 
 /** Work directory handling **/
+const char* GetSupportDir();
 const char* GetWorkDir();
 const char* GetGameDir();
 

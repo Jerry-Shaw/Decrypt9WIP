@@ -23,6 +23,22 @@ void DeinitFS()
     f_mount(NULL, "0:", 1);
 }
 
+const char* GetSupportDir()
+{
+    const char* root = "/";
+    const char* support_dirs[] = { SUPPORT_DIRS };
+    u32 n_dirs = sizeof(support_dirs) / sizeof(char*);
+    
+    u32 i;
+    for (i = 0; i < n_dirs; i++) {
+        FILINFO fno;
+        if ((f_stat(support_dirs[i], &fno) == FR_OK) && (fno.fattrib & AM_DIR))
+            break;
+    }
+    
+    return ((i >= n_dirs) ? root : support_dirs[i]);
+}
+
 const char* GetWorkDir()
 {
     const char* root = "/";
@@ -88,6 +104,9 @@ bool FileOpen(const char* path)
     bool ret = (f_open(&file, path, flags) == FR_OK) ||
         (f_open(&file, path, flags_ro) == FR_OK);
     f_chdir("/"); // allow root as alternative to work dir
+    if (!ret) ret = (f_open(&file, path, flags) == FR_OK) ||
+        (f_open(&file, path, flags_ro) == FR_OK);
+    f_chdir(GetSupportDir());
     if (!ret) ret = (f_open(&file, path, flags) == FR_OK) ||
         (f_open(&file, path, flags_ro) == FR_OK);
     f_chdir(GetWorkDir());
@@ -324,6 +343,11 @@ size_t FileGetData(const char* path, void* buf, size_t size, size_t foffset)
     if (*path == '/')
         path++;
     bool exists = (f_open(&tmp_file, path, flags) == FR_OK);
+    if (!exists) { // this allows root as alternative to work dir
+        f_chdir("/"); // temporarily change the current directory
+        exists = (f_open(&tmp_file, path, flags) == FR_OK);
+        f_chdir(GetSupportDir());
+    }
     if (!exists) { // this allows root as alternative to work dir
         f_chdir("/"); // temporarily change the current directory
         exists = (f_open(&tmp_file, path, flags) == FR_OK);
